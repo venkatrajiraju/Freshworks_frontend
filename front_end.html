@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<body>
+
+<h1>Country Search</h1>
+<form>
+<input type="text" id="country">
+</form>
+<button type="submit" onclick="country_search()">Search</button>
+<br>
+<p id="demo"></p>
+
+<script>
+function country_search()
+{
+var xmlhttp = new XMLHttpRequest();
+xmlhttp.onreadystatechange = function() {
+  if (this.readyState == 4 && this.status == 200) {
+    var arr = JSON.parse(this.responseText);
+    var out = "Not available";
+    var i;
+    var c=document.getElementById("country").value;
+  for(i = 0; i < arr.length; i++) {
+    if(c.localeCompare(arr[i].name)==0)
+    {
+    out = '<a href=country_details.html onclick='+passing(JSON.stringify(arr[i]))+'>' + arr[i].name+ '</a><br><img src='+arr[i].flag+'>';
+    localStorage.setItem("country",arr[i]);
+    }
+  }
+  document.getElementById("demo").innerHTML = out;
+  }
+};
+
+xmlhttp.open("GET", "https://restcountries.eu/rest/v2/name/united", true);
+xmlhttp.send();
+}
+function passing(value)
+{
+    localStorage.setItem("country_result",value);
+    return false;
+}
+</script>
+
+</body>
+</html>
